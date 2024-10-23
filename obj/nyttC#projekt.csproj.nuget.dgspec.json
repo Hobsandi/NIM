@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\nyttC#projekt.csproj": {}
+    "C:\\Users\\fatti\\C#\\NIM\\NIM\\nyttC#projekt.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\nyttC#projekt.csproj": {
+    "C:\\Users\\fatti\\C#\\NIM\\NIM\\nyttC#projekt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\nyttC#projekt.csproj",
+        "projectUniqueName": "C:\\Users\\fatti\\C#\\NIM\\NIM\\nyttC#projekt.csproj",
         "projectName": "nyttC#projekt",
-        "projectPath": "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\nyttC#projekt.csproj",
-        "packagesPath": "C:\\Users\\ellio\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\obj\\",
+        "projectPath": "C:\\Users\\fatti\\C#\\NIM\\NIM\\nyttC#projekt.csproj",
+        "packagesPath": "C:\\Users\\fatti\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\fatti\\C#\\NIM\\NIM\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ellio\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\fatti\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -64,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.402/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

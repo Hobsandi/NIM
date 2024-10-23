@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "sZBShzsdVIY=",
+  "dgSpecHash": "RVRxuOOtsA4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ellio\\OneDrive\\nyttC#projekt\\nyttC#projekt.csproj",
+  "projectFilePath": "C:\\Users\\fatti\\C#\\NIM\\NIM\\nyttC#projekt.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ellio\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
-    "C:\\Users\\ellio\\.nuget\\packages\\system.drawing.common\\8.0.10\\system.drawing.common.8.0.10.nupkg.sha512"
+    "C:\\Users\\fatti\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
+    "C:\\Users\\fatti\\.nuget\\packages\\system.drawing.common\\8.0.10\\system.drawing.common.8.0.10.nupkg.sha512"
   ],
   "logs": []
 }
