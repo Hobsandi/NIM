@@ -1,0 +1,113 @@
+using System;
+using System.Diagnostics.Contracts;
+
+namespace NyttC_projekt
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Struktur Bana = new Struktur(4);
+            Bana.Visa();
+            Console.WriteLine("Vilken nivå vill du ta från? (1-" + Bana.höjd + "): ");
+            Bana.activeLevel = Int32.Parse(Console.ReadLine());
+            Console.Clear();
+
+            Bana.Visa();
+            Console.WriteLine("Från vilken pinne vill du börja plocka?"); /*(1-" + Bana.nivåer[Bana.activeLevel-1].Length + "): "*/
+            Bana.start = Int32.Parse(Console.ReadLine());
+            Console.Clear();
+
+            Bana.Visa();
+            Console.WriteLine("Till och med vilken pinne vill du plocka?"); /*+ (startPos) + "-" + nivåer[valdNivå-1].Length + "): ");*/
+            Bana.stop = Int32.Parse(Console.ReadLine());
+            Console.Clear();
+
+            Bana.Visa();
+            Console.ReadLine();
+            Bana.TaBortPinnar();
+            Console.Clear();
+
+            Bana.Reset();
+            Bana.Visa();
+
+
+        }
+    }
+}
+
+public class Struktur 
+{
+    public int höjd;
+    private int[][] nivåer;
+    public int activeLevel = -1;
+    public int start = -1;
+    public int stop = -1;
+
+    public Struktur(int höjd) {
+        this.höjd = höjd;
+        this.nivåer = this.skapaNivåer(this.höjd);
+    }
+
+    private int[][] skapaNivåer(int höjd) {
+        int[][] nivåer  = new int[4][]; 
+        for (int i = 0; i < nivåer.Length; i++) { 
+            nivåer[i] = new int[2*i+1]; 
+            for (int j = 0; j < nivåer[i].Length; j++) { 
+                nivåer[i][j] = 1; 
+            }   
+        } 
+        return(nivåer); 
+    }
+
+    public void TaBortPinnar() {
+        for (int i = this.start-1; i < this.stop; i++) {
+            this.nivåer[this.activeLevel - 1][i] = 0;
+        }
+    }
+
+    public void Reset() {
+        this.start = -1;
+        this.stop = -1;
+        this.activeLevel = -1;
+    }
+
+    public void Visa() {
+        string levelOutput = "";
+        bool highlight = false;
+        for (int i = 0; i<this.nivåer.Length; i++) {
+            if (i == this.activeLevel - 1) {
+                highlight = true;
+            }
+            else {
+                highlight = false;
+            }
+            levelOutput += i+1;
+            //Console.Write(i+1); 
+            int[] nivå = this.nivåer[i]; 
+            string mellanslag = String.Concat(Enumerable.Repeat(" ", nivåer.Length-i)); 
+            levelOutput += mellanslag;
+            //Console.Write(mellanslag); 
+            if (highlight && this.start == -1) {
+                levelOutput += "\u001b[32m";
+            }
+            for (int j = 0; j < nivå.Length; j++) { 
+                if (highlight && j == this.start-1) {
+                    levelOutput += "\u001b[32m";
+                }
+                levelOutput += nivå[j];
+                
+                if (highlight && j == this.stop-1) {
+                    levelOutput += "\u001b[0m";
+                }
+
+                //Console.Write(nivå[j]); 
+            } 
+            if (highlight && this.stop == -1) {
+                levelOutput += "\u001b[0m";
+            }
+            Console.WriteLine(levelOutput);
+            levelOutput = "";
+        } 
+    }
+}

@@ -1,0 +1,24 @@
+// UPPGIFT 2 
+
+Console.Write("Skriv ett tal: ");
+string input1 = Console.ReadLine();
+Console.Write("Skriv ett till tal: ");
+string input2 = Console.ReadLine();
+
+int inp1 = Int32.Parse(input1);
+int inp2 = Int32.Parse(input2);
+
+int start, stop;
+
+if (inp1 < inp2) {
+    start = inp1;
+    stop = inp2;
+}
+else {
+    start = inp2;
+    stop = inp1;
+}
+
+for (int i = start + 1; i < stop; i++) {
+    Console.WriteLine(i);
+}

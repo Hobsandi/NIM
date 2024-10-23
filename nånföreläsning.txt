@@ -1,0 +1,115 @@
+using System;
+using System.Runtime.CompilerServices;
+using System.Xml;
+
+namespace NyttC_projekt
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            /*int[] testArray = [1,2,3,4,5];
+            WriteArray(testArray);
+            double average = GetAverage(testArray);
+            Console.WriteLine(average);
+
+            string stringOne = "Benjamin";
+            string stringTwo = "Benajmin";
+            if (ContainsString(stringOne, stringTwo)) {
+                Console.WriteLine(stringOne + " innehåller " + stringTwo);
+            }
+
+            WriteArray(MakeArray2(1,8,2));*/
+
+            string[] ordlista = ["banan", "äpple", "päron", "gurka", "stol", "cykel"];
+            string ord = GetValue(ordlista);
+            Console.WriteLine(ord);
+
+
+        }
+        static void WriteArray(int[] array) {
+            string output = "(";
+            for (int i = 0; i < array.Length-1;i++) {
+                output += array[i] + ", ";
+            }
+            output += array[array.Length-1] + ")";
+            Console.WriteLine(output);
+        }
+        static double GetAverage(int[] array) {
+            double average = 0;
+            int sum = 0;
+            foreach (int number in array) {
+                sum += number;
+            }
+            average = sum/array.Length;
+            return average;
+        }    
+        static bool ContainsString(string x, string y) {
+            bool containsY = false;
+            string potentialMatch = "";
+            int index = 0;
+            foreach (char letter in x) {
+                if (index < y.Length && letter == y[index]) {
+                    potentialMatch += letter;
+                    index++;
+                }
+            }
+            if (potentialMatch == y) {
+                containsY = true;
+            }
+
+            return containsY;
+        }
+        static int[] MakeArray(int start, int end, int step) {
+            int span = end-start;
+            int length = (span / step) + 1;
+            int[] outputArray = new int [length]; 
+            int num = start;
+            for (int i = 0; i < length; i++) {
+                outputArray[i] = num;
+                num += step;
+            }
+
+            return outputArray;
+        }
+        static int[] MakeArray2(int start, int stop, int step) {
+            int[] outputArray = new int [((stop-start)/step) + 1];
+            int index = 0;
+            for (int i = start; i <= stop; i+=step) {
+                outputArray[index] = i;
+                index++;
+            }
+            return outputArray;
+        }
+        static string GetValue(string[] stringArray) {
+            int inputIndex;
+            bool correctInput = false;
+            string output = "FEL!";
+            Console.Write("Skriv en indexposition (0-" + (stringArray.Length-1) + "): ");
+            while (!correctInput) {
+                try {
+                    inputIndex = Int32.Parse(Console.ReadLine());
+                    correctInput = true;
+                } 
+                catch (FormatException) {
+                    Console.WriteLine("Inputen måste vara ett heltal mellan 0 och " + (stringArray.Length-1) + ".");
+                    correctInput = false;
+                    continue;
+                }
+                try {
+                    output = stringArray[inputIndex];
+                }
+                catch (IndexOutOfRangeException) {
+                    Console.WriteLine("Inputen måste vara mellan 0 och " + (stringArray.Length-1) + ".");
+                    correctInput = false;
+                }
+            }
+
+
+            return output;
+
+        }
+
+
+    }
+}

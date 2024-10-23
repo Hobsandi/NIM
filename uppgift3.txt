@@ -1,0 +1,24 @@
+// UPPGIFT 3
+
+Console.Write("Skriv ett tal: ");
+string input = Console.ReadLine();
+
+int inp = Int32.Parse(input);
+int arrayPlatser = 0;
+
+for (int i = 1; i <= 100; i++) {
+    if (i % inp == 0) {
+        arrayPlatser++;
+    }
+}
+
+int[] produkter = new int[arrayPlatser];
+int index = 0;
+
+for (int i = 1; i <= 100; i++) {
+    if (i % inp == 0) {
+        produkter[index] = i;
+        Console.WriteLine(i);
+        index++;
+    }
+}

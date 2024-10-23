@@ -1,0 +1,103 @@
+//PROJEKT
+using System.Diagnostics.Tracing;
+
+
+static int[][] skapaNivåer(int höjd) { 
+    int[][] nivåer  = new int[4][]; 
+    for (int i = 0; i < nivåer.Length; i++) { 
+        nivåer[i] = new int[2*i+1]; 
+        for (int j = 0; j < nivåer[i].Length; j++) { 
+            nivåer[i][j] = 1; 
+        } 
+    } 
+    return(nivåer); 
+}
+
+static void visaNivåer(int[][] nivåer, int highlightedLevel = -1, int hlStart = -1, int hlStop = -1) { 
+    string levelOutput = "";
+    bool highlight = false;
+    for (int i = 0; i<nivåer.Length; i++) {
+        if (i == highlightedLevel - 1) {
+            highlight = true;
+        }
+        else {
+            highlight = false;
+        }
+        levelOutput += i+1;
+        //Console.Write(i+1); 
+        int[] nivå = nivåer[i]; 
+        string mellanslag = String.Concat(Enumerable.Repeat(" ", nivåer.Length-i)); 
+        levelOutput += mellanslag;
+        //Console.Write(mellanslag); 
+        if (highlight && hlStart == -1) {
+            levelOutput += "\u001b[32m";
+        }
+        for (int j = 0; j < nivå.Length; j++) { 
+            if (highlight && j == hlStart-1) {
+                levelOutput += "\u001b[32m";
+            }
+            levelOutput += nivå[j];
+            
+            if (highlight && j == hlStop-1) {
+                levelOutput += "\u001b[0m";
+            }
+
+            //Console.Write(nivå[j]); 
+        } 
+        if (highlight && hlStop == -1) {
+            levelOutput += "\u001b[0m";
+        }
+        Console.WriteLine(levelOutput);
+        levelOutput = "";
+    } 
+}
+
+
+
+static void taBortPinnar(int[][] nivåer, int nivå, int start, int stop) {
+    for (int i = start-1; i < stop; i++) {
+        nivåer[nivå-1][i] = 0;
+    }
+}
+
+static int chooseLevel(int[][] nivåer) {
+    int level = Int32.Parse(Console.ReadLine());
+    Console.Clear();
+    return (level);
+}
+
+
+static void spela() {
+    Console.Clear();
+    
+    int höjd = 4;
+    int[][] nivåer = skapaNivåer(höjd); 
+    visaNivåer(nivåer); 
+
+    Console.WriteLine("Vilken nivå vill du ta från? (1-" + höjd + "): ");
+    int valdNivå = chooseLevel(nivåer);
+    Console.Clear();
+    
+    
+    visaNivåer(nivåer, valdNivå);
+    Console.WriteLine("Från vilken pinne vill du börja plocka? (1-" + nivåer[valdNivå-1].Length + "): ");
+    int startPos = Int32.Parse(Console.ReadLine());
+    Console.Clear();
+
+    visaNivåer(nivåer, valdNivå, startPos);
+    Console.WriteLine("Till och med vilken pinne vill du plocka? (" + (startPos) + "-" + nivåer[valdNivå-1].Length + "): ");
+    int stopPos = Int32.Parse(Console.ReadLine());
+    Console.Clear();
+
+    visaNivåer(nivåer, valdNivå, startPos, stopPos);
+
+
+
+
+    taBortPinnar(nivåer, valdNivå, startPos, stopPos);
+    Console.Clear();
+    visaNivåer(nivåer);
+
+}
+
+spela();

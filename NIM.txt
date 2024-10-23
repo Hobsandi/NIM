@@ -1,0 +1,386 @@
+using System;
+using System.Diagnostics.Contracts;
+using System.Reflection.Metadata.Ecma335;
+
+
+// IDEER
+// instantwin drag
+
+
+namespace NyttC_projekt
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            UtilityMethods u = new UtilityMethods();
+            Console.Clear();
+            
+            //Variabler
+            bool exit = false;
+
+
+            //Välkomna till spelet
+            Welcome();
+            Console.ReadLine();
+
+            //Huvudloop
+            while(!exit) {
+                Console.Clear();
+                //Visa meny
+                ShowMenu();
+                //Ta in användarval
+                int pickedMenuOption = u.HandleStringUserInput("Välj ett alternativ: ", 1, 5);
+                //Behandla användarval (switch)
+                switch (pickedMenuOption) {
+                    case 1: 
+                        //Ta in spelarnamn
+                        int playAgain = 1;
+                        Console.Clear();
+                        Console.Write("Skriv namnet på första spelaren: ");
+                        Player player1 = new Player(Console.ReadLine());
+                        Console.Write("Skriv namnet på andra spelaren: ");
+                        Player player2 = new Player(Console.ReadLine());
+                        
+                        while (playAgain == 1) {
+                            PileStructure playField = new PileStructure(4);
+                            Game ActiveGame = new Game(player1, player2, playField);
+                            Player winner = ActiveGame.Play();
+                            Console.WriteLine("Grattis!" + winner.name + " vann!\nTack för att du spelade.");
+                            Console.ReadLine();
+
+                            Console.Clear();
+                            playAgain = u.HandleStringUserInput("Vill du spela igen? Skriv 1 för ja och 0 för nej: ",0,1);
+
+                        }
+                        break;
+                    case 2: 
+                        //Spela mot dator
+                        Console.Clear();
+                        Console.Write("Skriv ditt namn: ");
+                        Player singplayer = new Player(Console.ReadLine());
+                        Player computer = new Player("Datorn",true);
+                        playAgain = 1;
+                        while (playAgain == 1) {
+                            PileStructure playField = new PileStructure(4);
+                            Game ActiveGame = new Game(singplayer, computer, playField);
+                            Player winner = ActiveGame.Play();
+                            Console.WriteLine("Grattis!" + winner.name + " vann!\nTack för att du spelade.");
+                            Console.ReadLine();
+
+                            Console.Clear();
+                            playAgain = u.HandleStringUserInput("Vill du spela igen? Skriv 1 för ja och 0 för nej: ",0,1);
+
+                        }
+                        break;
+                    case 3:
+                        //Visa regler
+                        Console.Clear();
+                        ShowRules();
+                        break;
+                    case 4:
+                        //Visa leaderboard
+                        break;
+                    case 5:
+                        //Avsluta
+                        Console.Clear();
+                        int choice = u.HandleStringUserInput("Är du säker? Skriv 1 för ja och 0 för nej.", 0, 1);
+                        if (choice == 1) {
+                            exit = true;
+                        }
+                        break;
+                }         
+            }
+        }
+
+        static void Welcome() {
+            Console.WriteLine("Välkommen till NIM!");
+        }
+        /*static int HandleStringUserInput(string prompt, int floor, int ceiling) {
+            string input; 
+            int output = -1;
+            bool correctInput = false;
+
+            while (!correctInput) {
+                Console.Write(prompt);
+                input = Console.ReadLine();
+                try {
+                    output = Int32.Parse(input);  
+                    correctInput = true;              
+                }
+                catch (FormatException) {
+                    //AJA BAJA BARA SIFFROR
+                    correctInput = false;
+                    Console.WriteLine("Aja baja bara siffror!");
+                    continue;
+                }
+                if (output < floor || output > ceiling) {
+                    //bajskorv
+                    correctInput = false;
+                    Console.WriteLine("Håll dig inom ramarna!");
+                }
+            }
+            return output;
+        }*/
+
+        static void ShowMenu() {
+            Console.WriteLine("----MENY----");
+            Console.WriteLine("1. Spela mot en vän");
+            Console.WriteLine("2. Spela mot datorn");
+            Console.WriteLine("3. Spelregler");
+            Console.WriteLine("4. Visa leaderboard");
+            Console.WriteLine("5. Avsluta");
+        }
+
+        static void ShowRules() {
+            Console.WriteLine("---- SPELREGLER ----");
+            Console.WriteLine("Nim är ett klassiskt matematiskt spel som spelas av två spelare."); 
+            Console.WriteLine("I spelet har man arrangerat ett antal stickor i ett antal högar.");
+            Console.WriteLine("De två spelarna turas om att plocka ett valfritt antal stickor från en valfri hög.");
+            Console.WriteLine("Den spelare som plockar den sista stickan har förlorat.");
+            PileStructure Example = new PileStructure(4);
+            Example.Show();
+            Console.ReadLine();
+        }
+
+    }
+}
+
+public class Game 
+{
+    public Player player1;
+    public Player player2;
+    public Player winner;
+    public PileStructure playField;
+    private UtilityMethods u = new UtilityMethods();
+    //Movelist??
+
+    public Game(Player player1, Player player2, PileStructure playField) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.playField = playField;
+    }
+    public Player Play() {
+        int index = 0;
+        playField.Show();
+        while (playField.SticksLeft() != 0) {
+            if (index == 0) {
+                Move(player1);
+                index = 1;
+            } else {
+                Move(player2);
+                index = 0;
+            }
+            Console.Clear();
+            playField.Show();
+        }
+        if (index == 0) {
+            this.winner = player1;
+        } else {
+            this.winner = player2;
+        }
+        return this.winner;
+    }
+    private void Move(Player player) {
+        if (!player.isComputer) {
+            int[] allowedIndices = this.playField.GetNonEmptyPiles();
+            int pileChoice = u.HandlePileChoiceInput("Vilken hög vill du ta ifrån?\n" + player.name + ": ", 1, this.playField.height, allowedIndices);
+            
+            int sticksLeft = this.playField.SticksLeft(pileChoice-1);
+            int stickAmount = u.HandleStringUserInput("Hur många pinnar vill du plocka?",1,sticksLeft);
+            playField.RemoveSticks(pileChoice, stickAmount);
+        }
+        else {
+            Random rand = new Random();
+            int[] allowedIndices = this.playField.GetNonEmptyPiles();
+            int pileChoice = rand.Next(0,playField.height-1);
+            bool allowedPileChoice = false;
+            
+            
+            while (!allowedPileChoice) {
+                pileChoice = rand.Next(0,playField.height-1);
+
+                foreach (int index in allowedIndices) {
+                    if (pileChoice == index) {
+                        allowedPileChoice = true;
+                        break;
+                    }
+                }
+            }
+            int sticksLeft = this.playField.SticksLeft(pileChoice);
+            int stickAmount = rand.Next(1,sticksLeft);
+
+            playField.RemoveSticks(pileChoice+1, stickAmount);
+            Console.WriteLine(player.name + " kommer plocka " + stickAmount + " stickor " + " från hög " + (pileChoice+1));
+            Console.ReadLine();
+        }
+    }
+}
+public class Player 
+{
+    public string name;
+    public int totalPlayed;
+    public int totalWins;
+    public bool isComputer;
+
+    public Player(string name, bool isComputer = false) {
+        this.name = name;
+        this.isComputer = isComputer;
+    }
+}
+
+public class PileStructure 
+{
+    public int height;
+    private int[][] piles;
+
+    public PileStructure(int height) {
+        this.height = height;
+        this.piles = this.CreatePiles(this.height);
+    }
+
+    private int[][] CreatePiles(int height) {
+        //INTE HÅRDKODA FYRAN : FIXA
+        int[][] piles  = new int[height][]; 
+        for (int i = 0; i < piles.Length; i++) { 
+            piles[i] = new int[2*i+1]; 
+            for (int j = 0; j < piles[i].Length; j++) { 
+                piles[i][j] = 1; 
+            }   
+        } 
+        return(piles); 
+    }
+
+    public void RemoveSticks(int pileChoice, int stickAmount) {
+        int pileIndex = pileChoice - 1;
+        int removedSticks = 0;
+        for (int i = piles[pileIndex].Length - 1; i >= 0; i--) {
+            if (removedSticks < stickAmount && piles[pileIndex][i] == 1) {
+                piles[pileIndex][i] = 0;
+                removedSticks++;
+            }
+        }
+    }
+
+    public int[] GetNonEmptyPiles() {
+        int[] piles = new int[this.height];
+        for (int i = 0; i < this.height; i++) {
+            if (this.SticksLeft(i) > 0) {
+                piles[i] = i;
+            }
+        }
+        return piles;
+    }
+    public int SticksLeft(int pileChoice = -1) {
+        int sticksLeft = 0;
+
+        if (pileChoice == -1) {
+            for (int i = 0; i < this.piles.Length; i++) {
+                for (int j = 0; j < this.piles[i].Length; j++) {
+                        sticksLeft += piles[i][j];
+                    }
+                }
+        }
+        else {
+            foreach (int stick in piles[pileChoice]) {
+                sticksLeft += stick;
+            }
+        }
+        return sticksLeft;
+    }
+    
+    
+    public void Show() {
+        string pileOutput = "";
+        for (int i = 0; i<this.piles.Length; i++) {
+            pileOutput += i+1;
+            pileOutput += "     ";
+            int[] pile = this.piles[i]; 
+            string mellanslag = String.Concat(Enumerable.Repeat(" ", piles.Length-i)); 
+            pileOutput += mellanslag;
+            for (int j = 0; j < pile.Length; j++) { 
+                pileOutput += pile[j];
+            }
+            Console.WriteLine(pileOutput);
+            pileOutput = "";
+        } 
+    }
+}
+
+public class UtilityMethods 
+{
+    public UtilityMethods() {
+
+    }
+    public int HandleStringUserInput(string prompt, int floor, int ceiling) {
+        string input; 
+        int output = -1;
+        bool correctInput = false;
+
+        while (!correctInput) {
+            Console.Write(prompt);
+            input = Console.ReadLine();
+            try {
+                output = Int32.Parse(input);  
+                correctInput = true;              
+            }
+            catch (FormatException) {
+                //AJA BAJA BARA SIFFROR
+                correctInput = false;
+                Console.WriteLine("Aja baja bara siffror!");
+                continue;
+            }
+            if (output < floor || output > ceiling) {
+                //bajskorv
+                correctInput = false;
+                Console.WriteLine("Håll dig inom ramarna!");
+            }
+        }
+        return output;
+    }
+    public int HandlePileChoiceInput(string prompt, int floor, int ceiling, int[] allowedIndices) {
+        string input; 
+        int output = -1;
+        bool correctInput = false;
+        bool isInIndices = false;
+
+        while (!correctInput) {
+            Console.Write(prompt);
+            input = Console.ReadLine();
+            try {
+                output = Int32.Parse(input);  
+                correctInput = true;              
+            }
+            catch (FormatException) {
+                //AJA BAJA BARA SIFFROR
+                correctInput = false;
+                Console.WriteLine("Aja baja bara siffror!");
+                continue;
+            }
+            if (output < floor || output > ceiling) {
+                //bajskorv
+                correctInput = false;
+                Console.WriteLine("Håll dig inom ramarna!");
+            } 
+            foreach (int index in allowedIndices) {
+                if (output-1 == index) {
+                    //correctInput = true;
+                    isInIndices = true;
+                    break;
+                } else {
+                    isInIndices = false;
+                }
+            }
+            if (isInIndices) {
+                correctInput = true;
+            } else {
+                correctInput = false;
+                Console.WriteLine("Högen är tom!");
+
+            }
+
+        }
+        return output;
+    }
+
+}

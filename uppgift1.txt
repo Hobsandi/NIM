@@ -1,0 +1,19 @@
+//UPPGIFT 1 
+
+Console.Write("Skriv ett tal: ");
+string input1 = Console.ReadLine();
+Console.Write("Skriv ett till tal: ");
+string input2 = Console.ReadLine();
+Console.Write("Skriv ett tal till: ");
+string input3 = Console.ReadLine();
+
+int inp1 = Int32.Parse(input1);
+int inp2 = Int32.Parse(input2);
+int inp3 = Int32.Parse(input3);
+
+if (inp1 + inp2 == inp3) {
+    Console.WriteLine("Svaret är ja");
+}
+else {
+    Console.WriteLine("Svaret är nej");
+}

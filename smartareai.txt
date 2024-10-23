@@ -1,0 +1,40 @@
+int fours = 0;
+int twos = 0;
+int ones = 0;
+int[] sticksLeftArray = [1,3,5,7];
+
+
+for (int i = 0; i<4; i++) {
+    int sticksLeft = sticksLeftArray[i];
+    int remainder = sticksLeft;
+    if (remainder/4 >= 1) {
+        // Console.WriteLine(i + ": En fyra!");
+        // Console.ReadLine();
+        fours++;
+        remainder = remainder % 4;
+    }
+    if (remainder/2 >= 1) {
+        // Console.WriteLine(i + ": En tvåa!");
+        // Console.ReadLine();
+        twos++;
+        remainder = remainder % 2;
+    }
+    if (remainder == 1) {
+        // Console.WriteLine(i + ": En etta!");
+        // Console.ReadLine();
+        ones++;
+        remainder = 0;
+    } 
+}
+if ((fours%2 == 0 && twos % 2 == 0 && ones % 2 == 0)) {
+    // ta bort jämt antal av någon grupp
+}
+else {
+    
+}
+
+
+
+
+
+
